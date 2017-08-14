@@ -1,6 +1,7 @@
 package com.avaglir.util.algo
 
 import com.avaglir.util.IntVec
+import com.avaglir.util.structure.VecExts._
 
 import scala.annotation.tailrec
 

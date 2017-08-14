@@ -1,5 +1,6 @@
 package com.avaglir.util
 
+import com.avaglir.util.structure.VecExts._
 import com.avaglir.util.structure.Vector2
 
 import scala.collection.mutable

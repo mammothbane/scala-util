@@ -1,26 +1,26 @@
 package com.avaglir.util.color
 
-import com.avaglir.util.numeric.UnitClampedFloat
+import com.avaglir.util.numeric.UnitClamped
 
-sealed abstract class Color {
+abstract class Color {
   def red: Int
   def green: Int
   def blue: Int
 
-  def hue: UnitClampedFloat
-  def saturation: UnitClampedFloat
-  def luminance: UnitClampedFloat
+  def hue: UnitClamped[Float]
+  def saturation: UnitClamped[Float]
+  def luminance: UnitClamped[Float]
 
   lazy val hex: String = f"#$red%02x$green%02x$blue%02x"
 
   def hsl = HSL(hue, saturation, luminance)
   def rgb = RGB(red, green, blue)
 
-  def darker = HSL(hue, saturation, UnitClampedFloat(luminance.value/2))
-  def lighter = HSL(hue, saturation, UnitClampedFloat((luminance.value + 1f)/2))
+  def darker = HSL(hue, saturation, UnitClamped(luminance.value/2))
+  def lighter = HSL(hue, saturation, UnitClamped((luminance.value + 1f)/2))
 
-  def desaturated = HSL(hue, UnitClampedFloat(saturation.value/2), luminance)
-  def saturated = HSL(hue, UnitClampedFloat((saturation.value + 1f)/2), luminance)
+  def desaturated = HSL(hue, UnitClamped(saturation.value/2), luminance)
+  def saturated = HSL(hue, UnitClamped((saturation.value + 1f)/2), luminance)
 }
 
 object Color {

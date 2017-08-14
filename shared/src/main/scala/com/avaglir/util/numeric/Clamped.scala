@@ -1,10 +1,19 @@
 package com.avaglir.util.numeric
 
-class Clamped[T: Numeric](v: T,
-                          min: T = implicitly[Numeric[T]].zero,
-                          max: T = implicitly[Numeric[T]].one) {
+import com.avaglir.util.numeric.Imports._
+
+class Clamped[+T: Numeric](v: T,
+                           val min: T,
+                           val max: T) {
   lazy val value: T = v.clamp(min, max)
   override def toString: String = s"$value"
 }
 
-final case class UnitClamped[T: Numeric](v: T) extends Clamped[T](v)
+object Clamped {
+  def apply[T: Numeric](v: T, min: Option[T] = None, max: Option[T] = None) = {
+    val num = implicitly[Numeric[T]]
+    new Clamped(v, min.getOrElse(num.zero), max.getOrElse(num.one))
+  }
+}
+
+final case class UnitClamped[+T: Numeric](v: T) extends Clamped[T](v, implicitly[Numeric[T]].zero, implicitly[Numeric[T]].one)

@@ -1,4 +1,4 @@
 package com.avaglir.util
 
-package object numeric {
+package object color {
 }

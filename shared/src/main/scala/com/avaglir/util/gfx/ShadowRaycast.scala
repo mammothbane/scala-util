@@ -1,6 +1,6 @@
 package com.avaglir.util.gfx
 
-import com.avaglir.util.structure.Vector2
+import com.avaglir.util.structure.VecExts.Vector2
 
 /**
   * Calculates shadows from a given point via raycasting.
