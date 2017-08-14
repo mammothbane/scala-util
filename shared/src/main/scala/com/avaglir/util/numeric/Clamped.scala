@@ -10,7 +10,7 @@ class Clamped[+T: Numeric](v: T,
 }
 
 object Clamped {
-  def apply[T: Numeric](v: T, min: Option[T] = None, max: Option[T] = None) = {
+  def apply[T: Numeric](v: T, min: Option[T] = None, max: Option[T] = None): Clamped[T] = {
     val num = implicitly[Numeric[T]]
     new Clamped(v, min.getOrElse(num.zero), max.getOrElse(num.one))
   }

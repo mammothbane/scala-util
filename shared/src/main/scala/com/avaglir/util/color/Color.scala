@@ -2,7 +2,7 @@ package com.avaglir.util.color
 
 import com.avaglir.util.numeric.UnitClamped
 
-abstract class Color {
+trait Color {
   def red: Int
   def green: Int
   def blue: Int
