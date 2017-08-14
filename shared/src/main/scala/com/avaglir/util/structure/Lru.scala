@@ -1,4 +1,4 @@
-package com.avaglir.util
+package com.avaglir.util.structure
 
 import scala.collection.mutable
 

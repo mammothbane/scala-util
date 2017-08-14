@@ -1,4 +1,4 @@
-package com.avaglir.util
+package com.avaglir.util.structure
 
 case class Vector2[@specialized(Int, Double, Float) T: Numeric](x: T, y: T) {
   private val num = implicitly[Numeric[T]]

@@ -1,4 +1,6 @@
-package com.avaglir.util
+package com.avaglir.util.algo
+
+import com.avaglir.util.IntVec
 
 import scala.annotation.tailrec
 
@@ -18,7 +20,7 @@ case class Polygon(points: IntVec*) {
 
   private lazy val (const, mul) = precompute(0, points.length - 1, List.empty, List.empty)
 
-  def contains(point: IntVec) = {
+  def contains(point: IntVec): Boolean = {
     @tailrec
     def inside(i: Int, j: Int, oddNodes: Boolean): Boolean = {
       i match {

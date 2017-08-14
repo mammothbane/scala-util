@@ -1,4 +1,4 @@
-package com.avaglir.util
+package com.avaglir.util.structure
 
 import scala.reflect.ClassTag
 
@@ -7,18 +7,18 @@ class RingBuffer[T: ClassTag](capacity: Int) {
   private var head = 0
   private var tail = 0
 
-  def isEmpty = head == tail
-  def nonEmpty = head != tail
-  def isFull = (tail - head + capacity) % capacity == 1
+  def isEmpty: Boolean = head == tail
+  def nonEmpty: Boolean = head != tail
+  def isFull: Boolean = (tail - head + capacity) % capacity == 1
 
-  def put(t: T): Boolean = {
+  def push(t: T): Boolean = {
     if (isFull) return false
     buf(head) = t
     head += 1
     true
   }
 
-  def get: Option[T] = {
+  def pop: Option[T] = {
     if (isEmpty) return None
 
     val ret = buf(tail)
