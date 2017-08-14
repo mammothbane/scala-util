@@ -1,0 +1,35 @@
+import sbtcrossproject.CrossPlugin.autoImport.crossProject
+
+lazy val util = (crossProject(JSPlatform, JVMPlatform, NativePlatform) in file("."))
+  .settings(
+    name := "util",
+    scalaVersion := "2.11.11",
+    addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full),
+    resolvers += Resolver.sonatypeRepo("releases"),
+    scalacOptions ++= Seq(
+      "-language:implicitConversions",
+      "-language:reflectiveCalls",
+      "-language:higherKinds"
+    ),
+    libraryDependencies ++= Seq(
+      "org.scala-lang" % "scala-reflect" % scalaVersion.value
+    )
+  )
+  .jvmSettings(
+    libraryDependencies ++= Seq(
+      "org.scala-js" %% "scalajs-stubs" % scalaJSVersion % "provided"
+    ),
+    scalaVersion := "2.12.3"
+  )
+  .jsSettings(
+  )
+  .nativeSettings(
+  )
+
+
+lazy val js = util.js
+lazy val jvm = util.jvm
+lazy val native = util.native
+
+lazy val root = (project in file("."))
+  .aggregate(jvm, js, native)
