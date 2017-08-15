@@ -1,5 +1,7 @@
 package com.avaglir.util.structure
 
+import com.avaglir.util.structure.VecExts._
+
 import scala.reflect.ClassTag
 
 class Vector[@specialized(Int, Double, Float) T: Numeric : ClassTag, L <: VecLength : VecLength.Length](private[util] val elems: T*) {
@@ -16,12 +18,7 @@ class Vector[@specialized(Int, Double, Float) T: Numeric : ClassTag, L <: VecLen
   def unary_-(): Vector[T, L] = map(num.negate)
 
   def *[V](factor: V)(implicit conv: V => T): Vector[T, L] = map { elem => num.times(elem, factor) }
-  def /[V](factor: V)(implicit conv: V => T): Vector[T, L] = num match {
-    case n: Integral[T] => map { elem => n.quot(elem, factor) }
-    case n: Fractional[T] => map { elem => n.div(elem, factor) }
-  }
 
-  def half: Vector[T, L] = this / (one + one)
   def magnitude: Double = {
     val doubleRepr = this.map(_.toDouble)
     math.sqrt(doubleRepr.dot(doubleRepr))
@@ -46,9 +43,11 @@ class Vector[@specialized(Int, Double, Float) T: Numeric : ClassTag, L <: VecLen
 }
 
 object Vector {
+  private def vecLength[L : VecLength.Length]: Int = implicitly[VecLength.Length[L]].length
+
   def ZERO[T: Numeric: ClassTag, L <: VecLength : VecLength.Length]: Vector[T, L] =
-    new Vector[T, L](Array.fill[T](implicitly[VecLength.Length[L]].length)(implicitly[Numeric[T]].zero): _*)
+    new Vector[T, L](Array.fill[T](vecLength[L])(implicitly[Numeric[T]].zero): _*)
 
   def UNIT[T: Numeric: ClassTag, L <: VecLength : VecLength.Length]: Vector[T, L] =
-    new Vector[T, L](Array.fill[T](implicitly[VecLength.Length[L]].length)(implicitly[Numeric[T]].one): _*)
+    new Vector[T, L](Array.fill[T](vecLength[L])(implicitly[Numeric[T]].one): _*)
 }

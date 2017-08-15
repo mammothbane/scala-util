@@ -3,6 +3,23 @@ package com.avaglir.util.structure
 import scala.reflect.ClassTag
 
 object VecExts {
+  implicit class vecIntegralExt[T: Integral: ClassTag, L <: VecLength : VecLength.Length](v: Vector[T, L]) {
+    val num: Integral[T] = implicitly[Integral[T]]
+    import num._
+
+    def half: Vector[T, L] = this / (one + one)
+    def /[V](factor: V)(implicit conv: V => T): Vector[T, L] = v.map { _ / factor }
+  }
+
+  implicit class vecFractionalExt[T: Fractional: ClassTag, L <: VecLength : VecLength.Length](v: Vector[T, L]) {
+    val num: Fractional[T] = implicitly[Fractional[T]]
+    import num._
+
+    def half: Vector[T, L] = this / (one + one)
+    def /[V](factor: V)(implicit conv: V => T): Vector[T, L] = v.map { _ / factor }
+  }
+
+
   type Vector2[V] = Vector[V, VecLength.VL2.type]
   implicit class vec2Ext[T: Numeric: ClassTag](v: Vector2[T]) {
     val num: Numeric[T] = implicitly[Numeric[T]]

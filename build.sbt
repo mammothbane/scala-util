@@ -12,8 +12,11 @@ lazy val util = (crossProject(JSPlatform, JVMPlatform, NativePlatform) in file("
       "-language:higherKinds"
     ),
     libraryDependencies ++= Seq(
-      "org.scala-lang" % "scala-reflect" % scalaVersion.value
-    )
+      "org.scala-lang" % "scala-reflect" % scalaVersion.value,
+      "com.lihaoyi" %%% "utest" % "0.4.8" % "test"
+    ),
+    scalacOptions in Test += "-Yrangepos",
+    testFrameworks += new TestFramework("utest.runner.Framework")
   )
   .jvmSettings(
     libraryDependencies ++= Seq(
