@@ -5,7 +5,7 @@ import com.avaglir.util.structure.VecExts.Vector2
 /**
   * Calculates shadows from a given point via raycasting.
   */
-object ShadowRaycast {
+object ShadowCasting {
   /**
     * Build the set of all locations that are visible from the camera location.
     * @param camera The location of the virtual camera rendering the scene.
@@ -14,7 +14,7 @@ object ShadowRaycast {
     *                        *not* occlude.
     * @return The set of locations visible from the camera.
     */
-  def calculate(camera: Vector2[Int], fov: Int, checkVisibility: (Vector2[Int]) => Boolean): List[Vector2[Int]] = {
+  def apply(camera: Vector2[Int], fov: Int, checkVisibility: (Vector2[Int]) => Boolean): List[Vector2[Int]] = {
     circle_simple(camera, fov).filter { elem =>
 
       val line = bresenhamLine(camera, elem)
