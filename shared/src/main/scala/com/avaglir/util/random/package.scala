@@ -7,14 +7,14 @@ package object random {
     * @param lambda The expected value.
     */
   def poisson(lambda: Int)
-             (implicit randomSource: RandomSource[Double], num: Numeric[Double]): Int = {
+             (implicit randomSource: RandomSource[Double]): Int = {
     val l = math.exp(-lambda)
     var k = 0
     var p: Double = 1
 
     do {
       k += 1
-      p *= randomSource.random(num)
+      p *= randomSource.random
     } while (p > l)
 
     k - 1

@@ -57,6 +57,8 @@ object VecExts {
     val x = v(0)
     val y = v(1)
     val z = v(2)
+
+    import VecLength.Lengths._
     def cross[V: Numeric: ClassTag](other: Vector3[V])(implicit conv: (V) => T) =
       new Vector[T, VecLength.VL3.type](
         this.y * other.z - this.z * other.y,
