@@ -1,6 +1,6 @@
 package com.avaglir.util.color
 
-import com.avaglir.util.numeric.Imports._
+import com.avaglir.util.numeric._
 
 case class RGB(red: Int, green: Int, blue: Int) extends Color {
   override lazy val (hue, saturation, luminance) = {

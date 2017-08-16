@@ -1,7 +1,6 @@
 package com.avaglir.util.color
 
-import com.avaglir.util.numeric.Imports._
-import com.avaglir.util.numeric.UnitClamped
+import com.avaglir.util.numeric._
 
 case class HSL(hue: UnitClamped[Float], saturation: UnitClamped[Float], luminance: UnitClamped[Float]) extends Color {
   lazy val (red, green, blue) = {

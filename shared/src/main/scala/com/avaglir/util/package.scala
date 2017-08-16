@@ -1,7 +1,8 @@
 package com.avaglir
 
-import com.avaglir.util.structure.VecExts.Vector2
+import scala.reflect.ClassTag
 
 package object util {
+
   type IntVec = Vector2[Int]
 }

@@ -1,6 +1,6 @@
 package com.avaglir.util.random
 
-import com.avaglir.util.structure.VecExts._
+import com.avaglir.util.structure._
 
 /**
   * Found here https://gist.githubusercontent.com/KdotJPG/b1270127455a94ac5d19/raw/df72ca5e708ebcb1d3c401a0617e1e288c76da82/OpenSimplexNoise.java

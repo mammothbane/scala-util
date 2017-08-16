@@ -1,11 +1,10 @@
 package com.avaglir.util.algo
 
-import com.avaglir.util.IntVec
-import com.avaglir.util.structure.VecExts._
+import com.avaglir.util.structure._
 
 import scala.annotation.tailrec
 
-case class Polygon(points: IntVec*) {
+case class Polygon(points: Vector2[Int]*) {
   private lazy val horiz = points map { _.x }
   private lazy val vert = points map { _.y }
 
@@ -21,7 +20,7 @@ case class Polygon(points: IntVec*) {
 
   private lazy val (const, mul) = precompute(0, points.length - 1, List.empty, List.empty)
 
-  def contains(point: IntVec): Boolean = {
+  def contains(point: Vector2[Int]): Boolean = {
     @tailrec
     def inside(i: Int, j: Int, oddNodes: Boolean): Boolean = {
       i match {
@@ -40,7 +39,7 @@ case class Polygon(points: IntVec*) {
 }
 
 object Polygon {
-  def fromUnordered(pts: IntVec*): Polygon = {
+  def fromUnordered(pts: Vector2[Int]*): Polygon = {
     if (pts.isEmpty) return Polygon()
 
     def pbfs[S](init: S, expand: S => List[S]): List[S] = {
@@ -54,6 +53,6 @@ object Polygon {
       search(List(init), List.empty)
     }
 
-    Polygon(pbfs(pts.head, (elem: IntVec) => elem.adjacent.intersect(pts)): _*)
+    Polygon(pbfs(pts.head, (elem: Vector2[Int]) => elem.adjacent.intersect(pts)): _*)
   }
 }

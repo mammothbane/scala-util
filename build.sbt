@@ -3,7 +3,9 @@ import sbtcrossproject.CrossPlugin.autoImport.crossProject
 lazy val util = (crossProject(JSPlatform, JVMPlatform, NativePlatform) in file("."))
   .settings(
     name := "util",
-    scalaVersion := "2.11.11",
+    organization := "com.avaglir",
+    version := "0.1-SNAPSHOT",
+    scalaVersion := "2.12.3",
     addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full),
     resolvers += Resolver.sonatypeRepo("releases"),
     scalacOptions ++= Seq(
@@ -21,12 +23,12 @@ lazy val util = (crossProject(JSPlatform, JVMPlatform, NativePlatform) in file("
   .jvmSettings(
     libraryDependencies ++= Seq(
       "org.scala-js" %% "scalajs-stubs" % scalaJSVersion % "provided"
-    ),
-    scalaVersion := "2.12.3"
+    )
   )
   .jsSettings(
   )
   .nativeSettings(
+    scalaVersion := "2.11.11"
   )
 
 

@@ -1,10 +1,8 @@
 package com.avaglir.util.structure
 
-import com.avaglir.util.structure.VecExts._
-
 import scala.reflect.ClassTag
 
-class Vector[@specialized(Int, Double, Float) T: Numeric : ClassTag, L <: VecLength : VecLength.Length](private[util] val elems: T*) {
+class Vector[@specialized(Int, Double, Float) T: Numeric : ClassTag, L <: VecLength : Length](private[util] val elems: T*) {
   assert(elems.length == dimension)
   private val num = implicitly[Numeric[T]]
   import num._
@@ -23,7 +21,7 @@ class Vector[@specialized(Int, Double, Float) T: Numeric : ClassTag, L <: VecLen
     val doubleRepr = this.map(_.toDouble)
     math.sqrt(doubleRepr.dot(doubleRepr))
   }
-  def dimension: Int = implicitly[VecLength.Length[L]].length
+  def dimension: Int = implicitly[Length[L]].length
 
   def normalize: Vector[Double, L] = map { _.toDouble } / magnitude
   def transpose = new Vector[T, L](elems.reverse: _*)
@@ -43,11 +41,11 @@ class Vector[@specialized(Int, Double, Float) T: Numeric : ClassTag, L <: VecLen
 }
 
 object Vector {
-  private def vecLength[L : VecLength.Length]: Int = implicitly[VecLength.Length[L]].length
+  private def vecLength[L <: VecLength : Length]: Int = implicitly[Length[L]].length
 
-  def ZERO[T: Numeric: ClassTag, L <: VecLength : VecLength.Length]: Vector[T, L] =
+  def ZERO[T: Numeric: ClassTag, L <: VecLength : Length]: Vector[T, L] =
     new Vector[T, L](Array.fill[T](vecLength[L])(implicitly[Numeric[T]].zero): _*)
 
-  def UNIT[T: Numeric: ClassTag, L <: VecLength : VecLength.Length]: Vector[T, L] =
+  def UNIT[T: Numeric: ClassTag, L <: VecLength : Length]: Vector[T, L] =
     new Vector[T, L](Array.fill[T](vecLength[L])(implicitly[Numeric[T]].one): _*)
 }
