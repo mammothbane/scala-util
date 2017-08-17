@@ -2259,7 +2259,7 @@ case class SimplexNoise(perm: Array[Short], permGradIndex3D: Array[Short]) {
       attn_ext2 *= attn_ext2
       value += attn_ext2 * attn_ext2 * extrapolate(xsv_ext2, ysv_ext2, zsv_ext2, wsv_ext2, dx_ext2, dy_ext2, dz_ext2, dw_ext2)
     }
-    return value / SimplexNoise.NORM_CONSTANT_4D
+    value / SimplexNoise.NORM_CONSTANT_4D
   }
 
   private def extrapolate(xsb: Int, ysb: Int, dx: Double, dy: Double): Double = {

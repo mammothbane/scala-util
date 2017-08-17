@@ -4,7 +4,10 @@ import scala.annotation.tailrec
 
 object Search {
   // found here: https://github.com/raboof/astar/blob/master/src/main/scala/Astar.scala
-  def aStar[S](init: S, expand: S => Set[S], heuristic: S => Float, value: S => Float): S = {
+  def aStar[S, @specialized(Specializable.AllNumeric) T: Ordering](init: S, expand: S => Set[S], heuristic: S => T, value: S => T): S = {
+    val ord = implicitly[Ordering[T]]
+    import ord._
+
     @tailrec
     def search(unexpanded: Set[S], best: S, seen: Set[S]): S =
       unexpanded.toList.map(s => (s, heuristic(s))).sortBy { case (_, heur) => -heur }.headOption match {
