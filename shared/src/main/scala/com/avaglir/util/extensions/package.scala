@@ -1,7 +1,6 @@
 package com.avaglir.util
 
 import com.avaglir.util.structure._
-
 import scala.collection.GenTraversable
 
 package object extensions {

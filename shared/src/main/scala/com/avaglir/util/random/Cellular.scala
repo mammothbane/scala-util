@@ -1,7 +1,6 @@
 package com.avaglir.util.random
 
-import com.avaglir.util.numeric.Imports._
-import com.avaglir.util.numeric.UnitClamped
+import com.avaglir.util.numeric._
 
 object Cellular {
   sealed trait LifeState

@@ -1,6 +1,6 @@
 package com.avaglir
 
-import scala.reflect.ClassTag
+import com.avaglir.util.structure.Vector2
 
 package object util {
 

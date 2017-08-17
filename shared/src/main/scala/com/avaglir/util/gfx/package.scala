@@ -1,7 +1,6 @@
 package com.avaglir.util
 
-import com.avaglir.util.structure.VecExts._
-import com.avaglir.util.structure.Vector2
+import com.avaglir.util.structure._
 
 import scala.collection.mutable
 
@@ -10,7 +9,7 @@ package object gfx {
     val sorted = midpoint(center, radius).groupBy { _.x }.values.map { xls => (xls.minBy { _.y }, xls.maxBy { _.y } ) }
 
     sorted.flatMap {
-      case (min, max) => (min.y to max.y).map { Vector2(min.x, _) }
+      case (min, max) => (min.y to max.y).map { new Vector2(min.x, _) }
     }.toList
   }
 
@@ -25,10 +24,10 @@ package object gfx {
 
     val out = new mutable.ListBuffer[Vector2[Int]]
 
-    out += Vector2(center.x, center.y + radius)
-    out += Vector2(center.x, center.y - radius)
-    out += Vector2(center.x + radius, center.y)
-    out += Vector2(center.x - radius, center.y)
+    out += new Vector2(center.x, center.y + radius)
+    out += new Vector2(center.x, center.y - radius)
+    out += new Vector2(center.x + radius, center.y)
+    out += new Vector2(center.x - radius, center.y)
 
     while (x < y) {
       if (f >= 0) {
@@ -41,14 +40,14 @@ package object gfx {
       ddF_x += 2
       f += ddF_x
 
-      out += Vector2(center.x + x, center.y + y)
-      out += Vector2(center.x - x, center.y + y)
-      out += Vector2(center.x + x, center.y - y)
-      out += Vector2(center.x - x, center.y - y)
-      out += Vector2(center.x + y, center.y + x)
-      out += Vector2(center.x - y, center.y + x)
-      out += Vector2(center.x + y, center.y - x)
-      out += Vector2(center.x - y, center.y - x)
+      out += new Vector2(center.x + x, center.y + y)
+      out += new Vector2(center.x - x, center.y + y)
+      out += new Vector2(center.x + x, center.y - y)
+      out += new Vector2(center.x - x, center.y - y)
+      out += new Vector2(center.x + y, center.y + x)
+      out += new Vector2(center.x - y, center.y + x)
+      out += new Vector2(center.x + y, center.y - x)
+      out += new Vector2(center.x - y, center.y - x)
     }
     out.toList
   }
@@ -66,7 +65,7 @@ package object gfx {
     var y = 0
 
     for (x <- 0 to delta.x) {
-      out += Vector2(x, y)
+      out += new Vector2(x, y)
 
       err += dErr
       if (err >= 0.5) {
@@ -78,12 +77,12 @@ package object gfx {
     (tDelta.octant match {
       case 1 | 0 => out
       case 2 => out.map { _.transpose }
-      case 3 => out.reverse.map { elem => Vector2(-elem.y, elem.x) }
-      case 4 => out.reverse.map { elem => Vector2(-elem.x, elem.y) }
+      case 3 => out.reverse.map { elem => new Vector2(-elem.y, elem.x) }
+      case 4 => out.reverse.map { elem => new Vector2(-elem.x, elem.y) }
       case 5 => out.reverse.map { -_ }
       case 6 => out.reverse.map { _.transpose * -1 }
       case 7 => out.map { _.transpose * -1 }
-      case 8 => out.map { elem => Vector2(elem.x, -elem.y) }
+      case 8 => out.map { elem => new Vector2(elem.x, -elem.y) }
     }).map{ elem => elem + from }.toList
   }
 }

@@ -19,7 +19,7 @@ package object structure {
     def /[V](factor: V)(implicit conv: V => T): Vector[T, L] = v.map { _ / factor }
   }
 
-  private[file] type Vector2[V] = Vector[V, VecLength]
+  type Vector2[V] = Vector[V, VecLength.VL2.type]
   implicit class vec2Ext[T: Numeric: ClassTag](v: Vector2[T]) {
     val num: Numeric[T] = implicitly[Numeric[T]]
     import num._
@@ -60,7 +60,7 @@ package object structure {
       } else 0 // origin
     }
 
-    import com.avaglir.util.numeric.Imports._
+    import com.avaglir.util.numeric._
     def clamp[V: Numeric: ClassTag, W: Numeric: ClassTag](min: Vector2[V], max: Vector2[W])(implicit convV: V => T, convW: W => T): Vector2[T] =
       new Vector2(minOf[T](max.x, maxOf[T](min.x, x)), minOf[T](max.y, maxOf[T](min.y, y)))
   }

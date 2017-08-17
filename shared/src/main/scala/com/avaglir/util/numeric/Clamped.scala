@@ -1,7 +1,5 @@
 package com.avaglir.util.numeric
 
-import com.avaglir.util.numeric.Imports._
-
 class Clamped[+T: Numeric](v: T,
                            val min: T,
                            val max: T) {
@@ -15,5 +13,3 @@ object Clamped {
     new Clamped(v, min.getOrElse(num.zero), max.getOrElse(num.one))
   }
 }
-
-final case class UnitClamped[+T: Numeric](v: T) extends Clamped[T](v, implicitly[Numeric[T]].zero, implicitly[Numeric[T]].one)
