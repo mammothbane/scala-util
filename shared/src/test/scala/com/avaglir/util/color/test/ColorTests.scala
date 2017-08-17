@@ -1,7 +1,7 @@
 package com.avaglir.util.color.test
 
 import com.avaglir.util.color.{HSL, RGB}
-import com.avaglir.util.numeric.Imports._
+import com.avaglir.util.numeric._
 import utest._
 import utest.framework.{Test, Tree}
 

@@ -1,6 +1,7 @@
 package com.avaglir.util
 
 import com.avaglir.util.structure._
+
 import scala.collection.GenTraversable
 
 package object extensions {
@@ -12,6 +13,14 @@ package object extensions {
   implicit class genTExt[W](a: GenTraversable[W]) {
     def cartesianProduct[Z](other: GenTraversable[Z]): GenTraversable[(W, Z)] =
       a.flatMap { elem => other.map { inner => (elem, inner) } }
+
+    def combinations(length: Int): List[List[W]] = length match {
+      case x if x <= 0 => List.empty
+      case 1 => List(a.toList)
+      case x => a.cartesianProduct(combinations(x - 1)).map {
+        case (y, z) => y :: z
+      }.toList
+    }
   }
 
   implicit class strExt(s: String) {

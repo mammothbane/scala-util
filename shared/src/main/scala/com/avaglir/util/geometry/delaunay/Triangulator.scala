@@ -1,109 +1,70 @@
 package com.avaglir.util.geometry.delaunay
 
-import java.util
-import java.util.Collections
+import com.avaglir.util.extensions._
+import com.avaglir.util.structure._
 
-class DelaunayTriangulator(var pointSet: List[Nothing]) {
-  this.triangleSoup = new Nothing
-  private var triangleSoup = null
+import scala.collection.mutable
 
-  def triangulate(): Unit = {
-    triangleSoup = new Nothing
-    if (pointSet == null || pointSet.size < 3) throw new Nothing("Less than three points in point set.")
+class Triangulator(val points: Set[Vector2[Double]]) {
+  lazy val triangles: Set[Triangle] = {
+    val coordMax = points.map { pt => Math.max(pt.x, pt.y) }.max * 16
 
-    var maxOfAnyCoordinate = 0.0d
-    import scala.collection.JavaConversions._
-    for (vector <- getPointSet) {
-      maxOfAnyCoordinate = Math.max(Math.max(vector.x, vector.y), maxOfAnyCoordinate)
-    }
-    maxOfAnyCoordinate *= 16.0d
-    val p1 = new Nothing(0.0d, 3.0d * maxOfAnyCoordinate)
-    val p2 = new Nothing(3.0d * maxOfAnyCoordinate, 0.0d)
-    val p3 = new Nothing(-3.0d * maxOfAnyCoordinate, -3.0d * maxOfAnyCoordinate)
-    val superTriangle = new Nothing(p1, p2, p3)
-    triangleSoup.add(superTriangle)
-    var i = 0
-    while ( {
-      i < pointSet.size
-    }) {
-      val triangle = triangleSoup.findContainingTriangle(pointSet.get(i))
-      if (triangle == null) {
-          val edge = triangleSoup.findNearestEdge(pointSet.get(i))
-        val first = triangleSoup.findOneTriangleSharing(edge)
-        val second = triangleSoup.findNeighbour(first, edge)
-        val firstNoneEdgeVertex = first.getNoneEdgeVertex(edge)
-        val secondNoneEdgeVertex = second.getNoneEdgeVertex(edge)
-        triangleSoup.remove(first)
-        triangleSoup.remove(second)
-        val triangle1 = new Nothing(edge.a, firstNoneEdgeVertex, pointSet.get(i))
-        val triangle2 = new Nothing(edge.b, firstNoneEdgeVertex, pointSet.get(i))
-        val triangle3 = new Nothing(edge.a, secondNoneEdgeVertex, pointSet.get(i))
-        val triangle4 = new Nothing(edge.b, secondNoneEdgeVertex, pointSet.get(i))
-        triangleSoup.add(triangle1)
-        triangleSoup.add(triangle2)
-        triangleSoup.add(triangle3)
-        triangleSoup.add(triangle4)
-        legalizeEdge(triangle1, new Nothing(edge.a, firstNoneEdgeVertex), pointSet.get(i))
-        legalizeEdge(triangle2, new Nothing(edge.b, firstNoneEdgeVertex), pointSet.get(i))
-        legalizeEdge(triangle3, new Nothing(edge.a, secondNoneEdgeVertex), pointSet.get(i))
-        legalizeEdge(triangle4, new Nothing(edge.b, secondNoneEdgeVertex), pointSet.get(i))
-      }
-      else {
-        val a = triangle.a
-        val b = triangle.b
-        val c = triangle.c
-        triangleSoup.remove(triangle)
-        val first = new Nothing(a, b, pointSet.get(i))
-        val second = new Nothing(b, c, pointSet.get(i))
-        val third = new Nothing(c, a, pointSet.get(i))
-        triangleSoup.add(first)
-        triangleSoup.add(second)
-        triangleSoup.add(third)
-        legalizeEdge(first, new Nothing(a, b), pointSet.get(i))
-        legalizeEdge(second, new Nothing(b, c), pointSet.get(i))
-        legalizeEdge(third, new Nothing(c, a), pointSet.get(i))
-      }
-      {
-        i += 1; i - 1
+    val p1 = new Vector2(0, 3 * coordMax)
+    val p2 = new Vector2(3 * coordMax, 0)
+    val p3 = new Vector2(-3 * coordMax, -3 * coordMax)
+    val superTriangle = Triangle(p1, p2, p3)
+
+    val triangles = mutable.Set(superTriangle)
+
+    // TODO: make this tail-recursive
+    def legalize(triangle: Triangle, edge: Edge, point: Vector2[Double]): Unit = {
+      val neighbourTriangle = triangles.find { elt => elt != triangle && elt.isNeighbour(edge) }
+
+      neighbourTriangle match {
+        case Some(neighbor) =>
+          if (!neighbor.isPointInCircumcircle(point)) return
+          triangles -= triangle
+          triangles -= neighbor
+
+          val noneEdgeVertex = (neighbor - edge).head
+          val firstTriangle = Triangle(noneEdgeVertex, edge.a, point)
+          val secondTriangle = Triangle(noneEdgeVertex, edge.b, point)
+          triangles += firstTriangle
+          triangles += secondTriangle
+          legalize(firstTriangle, Edge(noneEdgeVertex, edge.a), point)
+          legalize(secondTriangle, Edge(noneEdgeVertex, edge.b), point)
+        case None =>
       }
     }
-    triangleSoup.removeTrianglesUsing(superTriangle.a)
-    triangleSoup.removeTrianglesUsing(superTriangle.b)
-    triangleSoup.removeTrianglesUsing(superTriangle.c)
+
+    points.foreach { pt =>
+      triangles.find { _.contains(pt) } match {
+        case Some(tri) =>
+          triangles -= tri
+          tri.vertices.combinations(2).foreach { ary =>
+            val newTri = Triangle(ary(0), ary(1), pt)
+            triangles += newTri
+            legalize(newTri, Edge(ary(0), ary(1)), pt)
+          }
+
+        case None =>
+          val nearestEdge = triangles.map { _.nearestEdge(pt) }.minBy { _.distance(pt).magnitude }
+          val neighbors = triangles.filter { _.isNeighbour(nearestEdge) }
+
+          triangles --= neighbors
+
+          neighbors
+            .flatMap { _.vertices.filterNot(nearestEdge.vertices.contains) }
+            .cartesianProduct(nearestEdge.vertices)
+            .foreach {
+              case (nonEdge, nearestEdgeVertex) =>
+                val tri = Triangle(nearestEdgeVertex, nonEdge, pt)
+                triangles += tri
+                legalize(tri, Edge(nearestEdgeVertex, nonEdge), pt)
+          }
+      }
+    }
+
+    triangles.toSet
   }
-
-  private def legalizeEdge(triangle: Nothing, edge: Nothing, newVertex: Nothing) = {
-    val neighbourTriangle = triangleSoup.findNeighbour(triangle, edge)
-    if (neighbourTriangle != null) if (neighbourTriangle.isPointInCircumcircle(newVertex)) {
-      triangleSoup.remove(triangle)
-      triangleSoup.remove(neighbourTriangle)
-      val noneEdgeVertex = neighbourTriangle.getNoneEdgeVertex(edge)
-      val firstTriangle = new Nothing(noneEdgeVertex, edge.a, newVertex)
-      val secondTriangle = new Nothing(noneEdgeVertex, edge.b, newVertex)
-      triangleSoup.add(firstTriangle)
-      triangleSoup.add(secondTriangle)
-      legalizeEdge(firstTriangle, new Nothing(noneEdgeVertex, edge.a), newVertex)
-      legalizeEdge(secondTriangle, new Nothing(noneEdgeVertex, edge.b), newVertex)
-    }
-  }
-
-  def shuffle(): Unit = Collections.shuffle(pointSet)
-
-  def shuffle(permutation: Array[Int]): Unit = {
-    val temp = new util.ArrayList[Nothing]
-    var i = 0
-    while ( {
-      i < permutation.length
-    }) {
-      temp.add(pointSet.get(permutation(i)))
-      {
-        i += 1; i - 1
-      }
-    }
-    pointSet = temp
-  }
-
-  def getPointSet: util.List[Nothing] = pointSet
-
-  def getTriangles: util.List[Nothing] = triangleSoup.getTriangles
 }
