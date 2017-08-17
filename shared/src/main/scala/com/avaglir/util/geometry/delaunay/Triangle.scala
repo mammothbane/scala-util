@@ -35,11 +35,11 @@ case class Triangle(a: Vector2[Double], b: Vector2[Double], c: Vector2[Double]) 
     val a23 = (b.x - point.x) * (b.x - point.x) + (b.y - point.y) * (b.y - point.y)
     val a33 = (c.x - point.x) * (c.x - point.x) + (c.y - point.y) * (c.y - point.y)
     val det = a11 * a22 * a33 + a12 * a23 * a31 + a13 * a21 * a32 - a13 * a22 * a31 - a12 * a21 * a33 - a11 * a23 * a32
-    if (isOrientedCCW) return det > 0.0d
+    if (ccw) return det > 0.0d
     det < 0.0d
   }
 
-  def isOrientedCCW: Boolean = {
+  lazy val ccw: Boolean = {
     val a11 = a.x - c.x
     val a21 = b.x - c.x
     val a12 = a.y - c.y
@@ -50,11 +50,11 @@ case class Triangle(a: Vector2[Double], b: Vector2[Double], c: Vector2[Double]) 
 
   def -(edge: Edge): Array[Vector2[Double]] = vertices.filterNot(edge.vertices.contains)
 
-  def isNeighbour(edge: Edge): Boolean = ((a eq edge.a) || (b eq edge.a) || (c eq edge.a)) && ((a eq edge.b) || (b eq edge.b) || (c eq edge.b))
+  def neighbor(edge: Edge): Boolean = ((a eq edge.a) || (b eq edge.a) || (c eq edge.a)) && ((a eq edge.b) || (b eq edge.b) || (c eq edge.b))
 
   def nearestEdge(point: Vector2[Double]): Edge = edges.minBy { _.distance(point).magnitude }
 
   private def hasSameSign(a: Double, b: Double) = Math.signum(a) == Math.signum(b)
 
-  override def toString: String = "Triangle2D[" + a + ", " + b + ", " + c + "]"
+  override def toString: String = s"Triangle($a, $b, $c)"
 }

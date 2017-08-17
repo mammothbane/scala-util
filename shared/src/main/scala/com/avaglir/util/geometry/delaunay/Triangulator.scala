@@ -18,7 +18,7 @@ class Triangulator(val points: Set[Vector2[Double]]) {
 
     // TODO: make this tail-recursive
     def legalize(triangle: Triangle, edge: Edge, point: Vector2[Double]): Unit = {
-      val neighbourTriangle = triangles.find { elt => elt != triangle && elt.isNeighbour(edge) }
+      val neighbourTriangle = triangles.find { elt => elt != triangle && elt.neighbor(edge) }
 
       neighbourTriangle match {
         case Some(neighbor) =>
@@ -49,7 +49,7 @@ class Triangulator(val points: Set[Vector2[Double]]) {
 
         case None =>
           val nearestEdge = triangles.map { _.nearestEdge(pt) }.minBy { _.distance(pt).magnitude }
-          val neighbors = triangles.filter { _.isNeighbour(nearestEdge) }
+          val neighbors = triangles.filter { _.neighbor(nearestEdge) }
 
           triangles --= neighbors
 
