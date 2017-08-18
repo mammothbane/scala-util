@@ -1,6 +1,5 @@
 package com.avaglir.util.algebra
 
-trait Monoid[T] {
-  this: Semigroup[T] =>
+trait Monoid[T] extends Semigroup[T] {
   def identity: T
 }

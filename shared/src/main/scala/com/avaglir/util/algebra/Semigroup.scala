@@ -1,5 +1,3 @@
 package com.avaglir.util.algebra
 
-trait Semigroup[T] {
-  this: Magma[T] =>
-}
+trait Semigroup[T] extends Magma[T]
