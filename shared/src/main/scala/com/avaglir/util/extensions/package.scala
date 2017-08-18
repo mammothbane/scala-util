@@ -16,7 +16,7 @@ package object extensions {
 
     def combinations(length: Int): List[List[W]] = length match {
       case x if x <= 0 => List.empty
-      case 1 => List(a.toList)
+      case 1 => a.map { List(_) }.toList
       case x => a.cartesianProduct(combinations(x - 1)).map {
         case (y, z) => y :: z
       }.toList

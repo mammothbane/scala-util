@@ -10,7 +10,7 @@ object Search {
 
     @tailrec
     def search(unexpanded: Set[S], best: S, seen: Set[S]): S =
-      unexpanded.toList.map(s => (s, heuristic(s))).sortBy { case (_, heur) => -heur }.headOption match {
+      unexpanded.toList.map(s => (s, heuristic(s))).sortBy{ case (_, heur) => heur }(ord.reverse).headOption match {
         case None => best
         case Some((_, heur)) if heur <= value(best) => best
         case Some((exp, _)) =>
