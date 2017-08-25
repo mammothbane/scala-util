@@ -2,7 +2,7 @@ package com.avaglir.util.structure
 
 import scala.reflect.ClassTag
 
-class Vector[@specialized(Int, Double, Float) T: Numeric : ClassTag, L <: VecLength : Length](private[util] val elems: T*) {
+class Vector[@specialized(Specializable.AllNumeric) T: Numeric : ClassTag, L <: VecLength : Length](private[util] val elems: T*) {
   assert(elems.length == dimension)
   private val num = implicitly[Numeric[T]]
   import num._

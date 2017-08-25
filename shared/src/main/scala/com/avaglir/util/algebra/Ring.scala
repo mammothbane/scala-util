@@ -1,6 +1,10 @@
 package com.avaglir.util.algebra
 
-trait Ring[T] extends Group[T] with Commutative[T] {
+trait Ring[@specialized(Specializable.AllNumeric) T] extends Group[T] with Commutative[T] {
+  implicit class ringExts[U: Ring](u: U) {
+    def *(other: U): U = implicitly[Ring[U]].mult(u, other)
+  }
+
   def additiveGroup: Group[T] with Commutative[T]
   def multiplicativeSemigroup: Semigroup[T]
 
