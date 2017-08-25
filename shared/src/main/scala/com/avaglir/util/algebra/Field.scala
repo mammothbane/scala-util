@@ -1,10 +1,6 @@
 package com.avaglir.util.algebra
 
 trait Field[@specialized(Specializable.AllNumeric) T] extends IntegralDomain[T] {
-  implicit class fieldExts[U: Field](u: U) {
-    def /(other: U): U = implicitly[Field[U]].div(u, other)
-  }
-
   def multiplicativeGroup: Group[T] with Commutative[T]
   final override def multiplicativeMonoid: Monoid[T] with Commutative[T] = multiplicativeGroup
 

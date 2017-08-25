@@ -32,4 +32,23 @@ package object algebra {
 
     override def additiveGroup: Group[T] with Commutative[T] = intDom.additiveGroup
   }
+
+  implicit class fieldExts[U: Field](u: U) {
+    def /(other: U): U = implicitly[Field[U]].div(u, other)
+  }
+
+  implicit class groupExts[U: Group](u: U) {
+    private val grp = implicitly[Group[U]]
+    def unary_- : U = grp.inverse(u)
+    def -(other: U): U = u + -other
+  }
+
+  implicit class magmaExts[U: Magma](u: U) {
+    def +(other: U): U = implicitly[Magma[U]].op(u, other)
+  }
+
+  implicit class ringExts[U: Ring](u: U) {
+    def *(other: U): U = implicitly[Ring[U]].mult(u, other)
+  }
+
 }
