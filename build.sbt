@@ -1,6 +1,4 @@
-
-
-lazy val util = (crossProject(JSPlatform, JVMPlatform, NativePlatform) in file("."))
+lazy val util = (sbtcrossproject.CrossPlugin.autoImport.crossProject(JSPlatform, JVMPlatform, NativePlatform) in file("."))
   .settings(
     name := "util",
     organization := "com.avaglir",
@@ -27,7 +25,6 @@ lazy val util = (crossProject(JSPlatform, JVMPlatform, NativePlatform) in file("
     )
   )
   .jsSettings(
-    //ayylamo
   )
   .nativeSettings(
     scalaVersion := "2.11.11"
