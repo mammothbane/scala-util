@@ -53,7 +53,7 @@ package object abstr {
     def *(other: U): U = implicitly[Ring[U]].mult(u, other)
   }
 
-  implicit def intModNGroup[N: TypeLength : LengthLookup]: Group[IntMod[N]] = new Group[IntMod[N]] with Commutative[IntMod[N]] {
+  implicit def intModNGroup[N <: TypeLength : LengthLookup]: Group[IntMod[N]] = new Group[IntMod[N]] with Commutative[IntMod[N]] {
     private val modulus = implicitly[LengthLookup[N]].length
     override def inverse(a: IntMod[N]): IntMod[N] = IntMod[N](modulus - a.num)
     override def identity: IntMod[N] = IntMod[N](0)
