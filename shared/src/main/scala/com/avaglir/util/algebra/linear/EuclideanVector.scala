@@ -8,5 +8,4 @@ case class EuclideanVector[@specialized(Specializable.AllNumeric) T, L <: TypeLe
 }
 
 object EuclideanVector {
-
 }

@@ -37,4 +37,16 @@ package object numeric {
     override def toFloat(x: Clamped[T]): Float = num.toFloat(x.value)
     override def toDouble(x: Clamped[T]): Double = num.toDouble(x.value)
   }
+
+  implicit val doubleSqrtable: Sqrtable[Double] = new Sqrtable[Double] {
+    override def sqrt(t: Double): Double = math.sqrt(t)
+  }
+
+  implicit val floatSqrtable: Sqrtable[Float] = new Sqrtable[Float] {
+    override def sqrt(t: Float): Float = math.sqrt(t.toDouble).toFloat
+  }
+
+  trait Sqrtable[T] {
+    def sqrt(t: T): T
+  }
 }

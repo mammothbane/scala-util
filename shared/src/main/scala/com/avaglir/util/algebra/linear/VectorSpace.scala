@@ -28,6 +28,6 @@ object VectorSpace {
 
   trait InnerProduct[V, @specialized(Specializable.AllNumeric) F] {
     this: VectorSpace[V, F] =>
-    def innerProduct(v: V, u: V): F
+    def innerProduct(v: V, u: V)(implicit field: Field[F]): F
   }
 }
