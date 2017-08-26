@@ -10,23 +10,25 @@ import com.avaglir.util.algebra.abstr.{Commutative, Field, Group}
   * @tparam V The vector type.
   * @tparam F Scalar type.
   */
-trait VectorSpace[V, F] {
+trait VectorSpace[V, @specialized(Specializable.AllNumeric) F] {
   def field: Field[F]
   def additiveGroup: Group[V] with Commutative[V]
 
   def scalarMult(f: F, v: V): V
+}
 
-  trait Normed {
-    this: VectorSpace[V, F] with SemiNormed =>
+object VectorSpace {
+  trait Normed[V, @specialized(Specializable.AllNumeric) F] {
+    this: VectorSpace[V, F] with SemiNormed[V, F] =>
     final def norm(v: V): F = seminorm(v)
   }
 
-  trait SemiNormed {
+  trait SemiNormed[V, @specialized(Specializable.AllNumeric) F] {
     this: VectorSpace[V, F] =>
     def seminorm(v: V): F
   }
 
-  trait InnerProduct {
+  trait InnerProduct[V, @specialized(Specializable.AllNumeric) F] {
     this: VectorSpace[V, F] =>
     def innerProduct(v: V, u: V): F
   }
