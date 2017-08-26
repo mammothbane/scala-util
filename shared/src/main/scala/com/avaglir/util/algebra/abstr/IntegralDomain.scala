@@ -5,7 +5,7 @@ package com.avaglir.util.algebra.abstr
   * @tparam T
   */
 trait IntegralDomain[@specialized(Specializable.AllNumeric) T] extends Ring[T] {
-  final def one: T = multiplicativeMonoid.identity
+  final val one: T = multiplicativeMonoid.identity
   def multiplicativeMonoid: Monoid[T] with Commutative[T]
-  final override def multiplicativeSemigroup: Semigroup[T] = multiplicativeMonoid
+  final override val multiplicativeSemigroup: Semigroup[T] = multiplicativeMonoid
 }

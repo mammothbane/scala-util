@@ -10,14 +10,14 @@ package object abstr {
   implicit def numeric2IntegralDomain[T: Numeric]: IntegralDomain[T] = new IntegralDomain[T] {
     private val num = implicitly[Numeric[T]]
 
-    override def multiplicativeMonoid: Monoid[T] with Commutative[T] = new Monoid[T] with Commutative[T] {
-      override def identity: T = num.one
+    override val multiplicativeMonoid: Monoid[T] with Commutative[T] = new Monoid[T] with Commutative[T] {
+      override val identity: T = num.one
       override def op(t: T, u: T): T = num.times(t, u)
     }
 
-    override def additiveGroup = new Group[T] with Commutative[T] {
+    override val additiveGroup = new Group[T] with Commutative[T] {
       override def inverse(a: T): T = num.negate(a)
-      override def identity: T = num.zero
+      override val identity: T = num.zero
       override def op(t: T, u: T): T = num.plus(t, u)
     }
   }
@@ -26,13 +26,13 @@ package object abstr {
     private val intDom = numeric2IntegralDomain[T]
     private val frac = implicitly[Fractional[T]]
 
-    override def multiplicativeGroup = new Group[T] with Commutative[T] {
+    override val multiplicativeGroup = new Group[T] with Commutative[T] {
       override def inverse(a: T): T = if (a == frac.zero) frac.zero else frac.div(frac.one, a)
       override def identity: T = frac.one
       override def op(t: T, u: T): T = frac.times(t, u)
     }
 
-    override def additiveGroup: Group[T] with Commutative[T] = intDom.additiveGroup
+    override val additiveGroup: Group[T] with Commutative[T] = intDom.additiveGroup
   }
 
   implicit class fieldExts[U: Field](u: U) {
@@ -40,8 +40,7 @@ package object abstr {
   }
 
   implicit class groupExts[U: Group](u: U) {
-    private val grp = implicitly[Group[U]]
-    def unary_- : U = grp.inverse(u)
+    val unary_- : U = implicitly[Group[U]].inverse(u)
     def -(other: U): U = u + -other
   }
 
@@ -56,7 +55,7 @@ package object abstr {
   implicit def intModNGroup[N <: TypeLength : LengthLookup]: Group[IntMod[N]] = new Group[IntMod[N]] with Commutative[IntMod[N]] {
     private val modulus = implicitly[LengthLookup[N]].length
     override def inverse(a: IntMod[N]): IntMod[N] = IntMod[N](modulus - a.num)
-    override def identity: IntMod[N] = IntMod[N](0)
+    override val identity: IntMod[N] = IntMod[N](0)
     override def op(t: IntMod[N], u: IntMod[N]): IntMod[N] = IntMod[N]((t.num + u.num) % modulus)
   }
 }

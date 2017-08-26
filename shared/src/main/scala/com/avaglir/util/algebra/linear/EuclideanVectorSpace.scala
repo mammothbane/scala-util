@@ -13,7 +13,7 @@ class EuclideanVectorSpace[F, D <: TypeLength : LengthLookup]
   protected val func: Functor[Gen] = Functor[Gen]
   import func.functorSyntax._
 
-  def dimension: Int = implicitly[LengthLookup[D]].length
+  val dimension: Int = implicitly[LengthLookup[D]].length
 
   final override def additiveGroup(implicit field: Field[F]): Group[EuclideanVector[F, D]] with Commutative[EuclideanVector[F, D]] = new Group[EuclideanVector[F, D]] with Commutative[EuclideanVector[F, D]] {
     override def inverse(a: EuclideanVector[F, D]): EuclideanVector[F, D] = a.map { -_ }
