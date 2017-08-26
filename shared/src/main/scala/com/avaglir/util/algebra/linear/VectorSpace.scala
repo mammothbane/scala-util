@@ -1,6 +1,6 @@
 package com.avaglir.util.algebra.linear
 
-import com.avaglir.util.algebra.abstrct.{Commutative, Field, Group}
+import com.avaglir.util.algebra.abstr.{Commutative, Field, Group}
 
 /**
   * Make sure all vector space properties are maintained. In particular:

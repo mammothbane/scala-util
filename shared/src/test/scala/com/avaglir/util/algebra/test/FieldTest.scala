@@ -1,7 +1,6 @@
 package com.avaglir.util.algebra.test
 
-import com.avaglir.util.algebra._
-import com.avaglir.util.algebra.abstrct.{Field, IntegralDomain}
+import com.avaglir.util.algebra.abstr.{Field, IntegralDomain}
 import utest._
 import utest.framework.{Test, Tree}
 

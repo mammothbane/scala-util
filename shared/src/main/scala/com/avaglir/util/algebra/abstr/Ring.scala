@@ -1,4 +1,4 @@
-package com.avaglir.util.algebra.abstrct
+package com.avaglir.util.algebra.abstr
 
 trait Ring[@specialized(Specializable.AllNumeric) T] extends Group[T] with Commutative[T] {
   def additiveGroup: Group[T] with Commutative[T]

@@ -1,4 +1,4 @@
-package com.avaglir.util.algebra.abstrct
+package com.avaglir.util.algebra.abstr
 
 /**
   * User *must* be able to prove that multiplication on the ring is a commutative monoid with no zero-divisors.

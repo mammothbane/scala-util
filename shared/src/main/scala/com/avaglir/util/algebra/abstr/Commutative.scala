@@ -1,4 +1,4 @@
-package com.avaglir.util.algebra.abstrct
+package com.avaglir.util.algebra.abstr
 
 /**
   * This is a marker trait. Must be able to prove that the magma operation is commutative.

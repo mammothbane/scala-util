@@ -1,4 +1,4 @@
-import sbtcrossproject.CrossPlugin.autoImport.crossProject
+
 
 lazy val util = (crossProject(JSPlatform, JVMPlatform, NativePlatform) in file("."))
   .settings(
@@ -15,7 +15,8 @@ lazy val util = (crossProject(JSPlatform, JVMPlatform, NativePlatform) in file("
     ),
     libraryDependencies ++= Seq(
       "org.scala-lang" % "scala-reflect" % scalaVersion.value,
-      "com.lihaoyi" %%% "utest" % "0.4.8" % "test"
+      "com.lihaoyi" %%% "utest" % "0.4.8" % "test",
+      "org.scalaz" %%% "scalaz-core" % "7.2.15"
     ),
     scalacOptions in Test += "-Yrangepos",
     testFrameworks += new TestFramework("utest.runner.Framework")
@@ -26,6 +27,7 @@ lazy val util = (crossProject(JSPlatform, JVMPlatform, NativePlatform) in file("
     )
   )
   .jsSettings(
+    //ayylamo
   )
   .nativeSettings(
     scalaVersion := "2.11.11"
