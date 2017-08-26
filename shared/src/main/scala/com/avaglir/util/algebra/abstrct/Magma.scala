@@ -1,4 +1,4 @@
-package com.avaglir.util.algebra
+package com.avaglir.util.algebra.abstrct
 
 trait Magma[@specialized(Specializable.AllNumeric) T] extends PartialGroupoid[T] {
   def op(t: T, u: T): T

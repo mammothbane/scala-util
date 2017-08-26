@@ -1,6 +1,6 @@
-package com.avaglir.util
+package com.avaglir.util.algebra
 
-package object algebra {
+package object abstrct {
   type Groupoid[T] = Magma[T]
   type PartialMagma[T] = PartialGroupoid[T]
   type AbelianGroup[T] = Group[T] with Commutative[T]
