@@ -3,8 +3,7 @@ package com.avaglir.util.structure
 import scala.annotation.tailrec
 import scala.collection.mutable
 
-case class RadixTree[K, V] private (key: Option[K] = None,
-                                    var value: Option[V] = None,
+case class RadixTree[K, V] private (var value: Option[V] = None,
                                     children: mutable.HashMap[K, RadixTree[K, V]] = mutable.HashMap.empty[K, RadixTree[K, V]]) {
   type Tokenizer[T] = Tokenizable[T, K]
 
@@ -26,7 +25,7 @@ case class RadixTree[K, V] private (key: Option[K] = None,
   private def pushRec(seq: Seq[K], value: V): Unit = seq match {
     case x if x.isEmpty => this.value = Some(value)
     case head +: tail   => children
-      .getOrElseUpdate(head, RadixTree[K, V](Some(head)))
+      .getOrElseUpdate(head, RadixTree[K, V]())
       .pushRec(tail, value)
   }
 
@@ -61,7 +60,7 @@ case class RadixTree[K, V] private (key: Option[K] = None,
 object RadixTree {
   def apply[K, T, V](s: Map[T, V])(implicit tokenizable: Tokenizable[T, K]): RadixTree[K, V] = {
     val root = RadixTree[K, V]()
-    s.foreach { case (k, v) => root.push(tokenizable(k), v) }
+    s.foreach { case (k, v) => root.push(k, v) }
 
     root
   }
