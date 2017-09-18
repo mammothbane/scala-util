@@ -80,7 +80,9 @@ package object structure {
         this.x * other.y - this.y * other.x)
   }
 
-  type TokenizableTo[T] = ({type x[a] = Tokenizable[a, T]})#x
+  // this is here for reference:
+  // type TokenizableTo[T] = ({type x[a] = Tokenizable[a, T]})#x
+
   trait Tokenizable[T, U] {
     def apply(t: T): Seq[U]
   }
