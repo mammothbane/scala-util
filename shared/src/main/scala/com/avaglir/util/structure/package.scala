@@ -88,8 +88,29 @@ package object structure {
     def apply(t: T): Seq[U]
   }
 
+  trait Detokenizable[T, U] {
+    def apply(u: Seq[U]): T
+  }
+
+  trait TokenConvertible[T, U] {
+    def apply(t: T): Seq[U]
+    def apply(u: Seq[U]): T
+  }
+
   implicit val stringCharTokenizable: Tokenizable[String, Char] = (t: String) => t.toCharArray
+  implicit val stringCharDetokenizable: Detokenizable[String, Char] = (t: Seq[Char]) => new String(t.toArray)
+
   implicit def cbfSeqTokenizable[W[_], K](implicit cbf: CanBuildFrom[W[K], K, Seq[K]]): Tokenizable[W[K], K] =
     (a: W[K]) => cbf.apply(a).result()
+
+  implicit def cbfSeqDetokenizable[W[_], K](implicit cbf: CanBuildFrom[Seq[K], K, W[K]]): Detokenizable[W[K], K] =
+    (a: Seq[K]) => cbf.apply(a).result()
+
+  implicit def tokenDetoken2TokenConvertible[T, U](implicit t: Tokenizable[T, U],
+                                                   u: Detokenizable[T, U]): TokenConvertible[T, U] =
+    new TokenConvertible[T, U] {
+      override def apply(a: T) = t(a)
+      override def apply(a: Seq[U]) = u(a)
+    }
 
 }
