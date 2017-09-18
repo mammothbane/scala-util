@@ -3,17 +3,17 @@ package com.avaglir.util.structure
 import scala.annotation.tailrec
 import scala.collection.mutable
 
-case class RadixTree[K, E, V] private
+case class MutableRadixTree[K, E, V] private
   (private[structure] var value: Option[V] = None,
-   private[structure] val children: mutable.HashMap[E, RadixTree[K, E, V]] = mutable.HashMap.empty[E, RadixTree[K, E, V]])
+   private[structure] val children: mutable.HashMap[E, MutableRadixTree[K, E, V]] = mutable.HashMap.empty[E, MutableRadixTree[K, E, V]])
   (implicit private val tokenConvert: TokenConvertible[K, E]) extends mutable.Map[K, V] {
 
-  override def +=(kv: (K, V)): RadixTree.this.type = {
+  override def +=(kv: (K, V)): MutableRadixTree.this.type = {
     pushRec(tokenConvert(kv._1), kv._2)
     this
   }
 
-  override def -=(key: K): RadixTree.this.type = {
+  override def -=(key: K): MutableRadixTree.this.type = {
     removeRec(tokenConvert(key))
     this
   }
@@ -23,7 +23,7 @@ case class RadixTree[K, E, V] private
   }
 
   override def iterator: Iterator[(K, V)] = new Iterator[(K, V)] {
-    var pending: mutable.Queue[(Seq[E], RadixTree[K, E, V])] = mutable.Queue((Seq.empty, RadixTree.this))
+    var pending: mutable.Queue[(Seq[E], MutableRadixTree[K, E, V])] = mutable.Queue((Seq.empty, MutableRadixTree.this))
 
     override def hasNext: Boolean = pending.nonEmpty
     override def next(): (K, V) = {
@@ -43,7 +43,7 @@ case class RadixTree[K, E, V] private
 
   final override def isEmpty: Boolean = {
     @tailrec
-    def recEmpty(checkList: List[RadixTree[K, E, V]]): Boolean = checkList match {
+    def recEmpty(checkList: List[MutableRadixTree[K, E, V]]): Boolean = checkList match {
       case Nil => true
       case x :: xs => (x.value.isEmpty || x.children.isEmpty) && recEmpty(x.children.values.toList ::: xs)
     }
@@ -55,7 +55,7 @@ case class RadixTree[K, E, V] private
   private def pushRec(seq: Seq[E], value: V): Unit = seq match {
     case x if x.isEmpty => this.value = Some(value)
     case head +: tail   => children
-      .getOrElseUpdate(head, RadixTree[K, E, V]())
+      .getOrElseUpdate(head, MutableRadixTree[K, E, V]())
       .pushRec(tail, value)
   }
 
@@ -87,9 +87,9 @@ case class RadixTree[K, E, V] private
   }
 }
 
-object RadixTree {
-  def apply[K, E, V](s: Map[K, V])(implicit tokenConvert: TokenConvertible[K, E]): RadixTree[K, E, V] = {
-    val root = RadixTree[K, E, V]()
+object MutableRadixTree {
+  def apply[K, E, V](s: Map[K, V])(implicit tokenConvert: TokenConvertible[K, E]): MutableRadixTree[K, E, V] = {
+    val root = MutableRadixTree[K, E, V]()
     s.foreach { case (k, v) => root(k) = v }
 
     root

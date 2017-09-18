@@ -13,7 +13,7 @@ object RadixTreeTests extends TestSuite {
         "b" -> 4
       )
 
-      val radix = RadixTree(strings)
+      val radix = MutableRadixTree(strings)
 
       strings.foreach { case (a, b) => radix(a) ==> b }
       radix.get("c") ==> None
@@ -29,7 +29,7 @@ object RadixTreeTests extends TestSuite {
         "bcde" -> 5,
       )
 
-      val radix = RadixTree(strings)
+      val radix = MutableRadixTree(strings)
 
       strings.foreach { case (a, b) => radix(a) ==> b }
       List("a", "b", "c", "").foreach { radix.get(_) ==> None }
