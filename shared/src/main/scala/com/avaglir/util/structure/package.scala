@@ -1,5 +1,6 @@
 package com.avaglir.util
 
+import scala.collection.generic.CanBuildFrom
 import scala.reflect.ClassTag
 
 package object structure {
@@ -88,5 +89,7 @@ package object structure {
   }
 
   implicit val stringCharTokenizable: Tokenizable[String, Char] = (t: String) => t.toCharArray
-  implicit def seqIdentityTokenizable[K]: Tokenizable[Seq[K], K] = (k: Seq[K]) => k
+  implicit def cbfSeqTokenizable[W[_], K](implicit cbf: CanBuildFrom[W[K], K, Seq[K]]): Tokenizable[W[K], K] =
+    (a: W[K]) => cbf.apply(a).result()
+
 }
