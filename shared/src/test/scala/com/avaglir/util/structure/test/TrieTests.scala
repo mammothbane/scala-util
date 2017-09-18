@@ -4,7 +4,7 @@ import com.avaglir.util.structure._
 import utest._
 import utest.framework.{Test, Tree}
 
-object RadixTreeTests extends TestSuite {
+object TrieTests extends TestSuite {
 
   val tests: Tree[Test] = this {
     'BasicString {
@@ -13,7 +13,7 @@ object RadixTreeTests extends TestSuite {
         "b" -> 4
       )
 
-      val radix = MutableRadixTree(strings)
+      val radix = MutableTrie(strings)
 
       strings.foreach { case (a, b) => radix(a) ==> b }
       radix.get("c") ==> None
@@ -29,7 +29,7 @@ object RadixTreeTests extends TestSuite {
         "bcde" -> 5,
       )
 
-      val radix = MutableRadixTree(strings)
+      val radix = MutableTrie(strings)
 
       strings.foreach { case (a, b) => radix(a) ==> b }
       List("a", "b", "c", "").foreach { radix.get(_) ==> None }
