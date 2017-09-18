@@ -82,6 +82,9 @@ package object structure {
 
   type TokenizableTo[T] = ({type x[a] = Tokenizable[a, T]})#x
   trait Tokenizable[T, U] {
-    def tokenize(t: T): Seq[U]
+    def apply(t: T): Seq[U]
   }
+
+  implicit val stringCharTokenizable: Tokenizable[String, Char] = (t: String) => t.toCharArray
+  implicit def seqIdentityTokenizable[K]: Tokenizable[Seq[K], K] = (k: Seq[K]) => k
 }
