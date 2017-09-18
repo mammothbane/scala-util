@@ -7,7 +7,7 @@ import utest.framework.{Test, Tree}
 object RadixTreeTests extends TestSuite {
 
   val tests: Tree[Test] = this {
-    'BasicStringRadix {
+    'BasicString {
       val strings = Map(
         "a" -> 3,
         "b" -> 4
@@ -20,7 +20,7 @@ object RadixTreeTests extends TestSuite {
       radix.get("") ==> None
     }
 
-    'ComplexStringRadix {
+    'ComplexString {
       val strings = Map(
         "abc" -> 1,
         "bcd" -> 2,
