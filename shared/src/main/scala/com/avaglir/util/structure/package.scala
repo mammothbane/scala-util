@@ -73,12 +73,15 @@ package object structure {
     val x = v(0)
     val y = v(1)
     val z = v(2)
-
-    import Length._
     def cross[V: Numeric: ClassTag](other: Vector3[V])(implicit conv: (V) => T) =
       new Vector[T, VecLength.VL3.type](
         this.y * other.z - this.z * other.y,
         this.z * other.x - this.x * other.z,
         this.x * other.y - this.y * other.x)
+  }
+
+  type TokenizableTo[T] = ({type x[a] = Tokenizable[a, T]})#x
+  trait Tokenizable[T, U] {
+    def tokenize(t: T): Seq[U]
   }
 }
